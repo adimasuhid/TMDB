@@ -1,0 +1,12 @@
+language: ruby
+cache: bundler
+bundler_args: --deployment
+rvm:
+  - 2.0.0
+  - 1.9.3
+before_script:
+   - /bin/cp $TRAVIS_BUILD_DIR/config/database.yml.sample $TRAVIS_BUILD_DIR/config/database.yml
+   - psql -c 'create database movies_test;' -U postgres
+   - psql -d template1 -c 'create extension hstore;' -U postgres
+env:
+  RAILS_ENV=test
