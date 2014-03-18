@@ -1,0 +1,16 @@
+language: ruby
+cache: bundler
+bundler_args: --deployment
+rvm:
+  - 2.0.0
+  - 1.9.3
+script:
+  - RAILS_ENV=test bundle exec rake db:migrate --trace
+  - bundle exec rake db:test:prepare
+  - bundle exec rspec spec/
+before_script:
+   - /bin/cp $TRAVIS_BUILD_DIR/config/database.yml.sample $TRAVIS_BUILD_DIR/config/database.yml
+   - psql -c 'create database movies_test;' -U postgres
+   - psql -d template1 -c 'create extension hstore;' -U postgres
+env:
+  RAILS_ENV=test
