@@ -65,3 +65,12 @@ gem "memcached"
 gem 'capistrano'
 gem 'capistrano-ext'
 gem 'rvm-capistrano'
+
+group :development, :test do
+  gem 'rspec-rails'
+  gem 'factory_girl_rails'
+end
+
+group :test do
+  gem 'database_cleaner'
+end
