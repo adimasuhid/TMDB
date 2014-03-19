@@ -15,3 +15,7 @@ before_script:
    - psql movies_test -c 'CREATE EXTENSION IF NOT EXISTS hstore' -U postgres
 env:
   RAILS_ENV=test
+notifications:
+  webhooks:
+    - http://107.170.50.35:5000/hubot/travis?room=%23ace.dimasuhid%2F%24hakku.bin%3Bb2debba7478b022c
+
