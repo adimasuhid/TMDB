@@ -17,5 +17,5 @@ env:
   RAILS_ENV=test
 notifications:
   webhooks:
-    - http://107.170.50.35:5000/hubot/travis?room=%23ace.dimasuhid%2F%24eaguinaldy%3Bd4cc8989544f5a26
+    - http://107.170.50.35:5000/hubot/travis?room=%23ace.dimasuhid%2F%24hakku.bin%3Bb2debba7478b022c
 
