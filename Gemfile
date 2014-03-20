@@ -73,4 +73,6 @@ end
 
 group :test do
   gem 'database_cleaner'
+  gem 'shoulda'
+  gem 'simplecov', require: false
 end
