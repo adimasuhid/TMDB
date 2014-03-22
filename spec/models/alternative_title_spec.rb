@@ -17,7 +17,7 @@ describe AlternativeTitle do
     end
 
     it "validates uniqueness of alternative_title with language_id, movie_id" do
-      expect(subject).to validate_uniqueness_of(:alternative_title).scoped_to([:language_id, :movie_id])
+      expect(subject).to validate_uniqueness_of(:alternative_title).scoped_to([:language_id, :movie_id]).case_insensitive
     end
 
   end

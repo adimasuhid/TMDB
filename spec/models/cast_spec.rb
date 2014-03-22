@@ -17,7 +17,7 @@ describe Cast do
     end
 
     it "validates uniqueness of character with person_id and movie_id" do
-      expect(subject).to validate_uniqueness_of(:character).scoped_to([:person_id, :movie_id])
+      expect(subject).to validate_uniqueness_of(:character).scoped_to([:person_id, :movie_id]).case_insensitive
     end
   end
 end
