@@ -7,7 +7,7 @@ FactoryGirl.define do
     overview "MyText"
     content_score 1
     approved false
-    locked ""
+    locked []
     user_id 1
     original_id 1
     popular "9.99"
