@@ -4,7 +4,7 @@ describe Image do
   let!(:image) { FactoryGirl.build :image }
 
   describe ".search" do
-    context "with approved companies" do
+    context "with approved images" do
       before :each do
         image.approved = true
         image.save!
@@ -24,7 +24,7 @@ describe Image do
       end
     end
 
-    context "with unapproved companies" do
+    context "with unapproved images" do
       it "returns a blank object" do
         image.save
         expect(Image.search("mystring")).to be_blank
