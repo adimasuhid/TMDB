@@ -16,7 +16,7 @@ describe Crew do
       expect(subject).to validate_presence_of :person_id
     end
 
-    it "validates uniquness of job with person_id and movie_id" do
+    it "validates case insensitive uniquness of job with person_id and movie_id" do
       expect(subject).to validate_uniqueness_of(:job).scoped_to([:person_id, :movie_id]).case_insensitive
     end
   end

@@ -16,7 +16,7 @@ describe AlternativeTitle do
       expect(subject).to validate_presence_of :movie_id
     end
 
-    it "validates uniqueness of alternative_title with language_id, movie_id" do
+    it "validates case insensitive uniqueness of alternative_title with language_id, movie_id" do
       expect(subject).to validate_uniqueness_of(:alternative_title).scoped_to([:language_id, :movie_id]).case_insensitive
     end
 
