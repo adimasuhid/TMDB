@@ -9,11 +9,11 @@ describe Cast do
     end
 
     it "validates presence of person_id" do
-      expect(subject).to validate_presence_of :movie_id
+      expect(subject).to validate_presence_of :person_id
     end
 
     it "validates presence of movie_id" do
-      expect(subject).to validate_presence_of :person_id
+      expect(subject).to validate_presence_of :movie_id
     end
 
     it "validates case insensitive uniqueness of character with person_id and movie_id" do
