@@ -10,9 +10,8 @@ FactoryGirl.define do
     homepage "MyString"
     imdb_id "MyString"
     approved false
-    locked ""
+    locked []
     user_id 1
-    original_id 1
     temp_user_id "MyString"
     popular "9.99"
     meta_title "MyString"

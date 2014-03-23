@@ -38,9 +38,10 @@ class Movie < ActiveRecord::Base
     movies = movies.uniq
   end
 
-  def self.find_all_includes
+  def self.find_all_includes(page)
     # self.find(:all, :includes => [:alternative_titles, :casts, :crews, :movie_genres, :movie_keywords, :revenue_countries, :production_companies, :releases])
-    self.find(:all, :includes => [:images]).order("movies.approved DESC, movies.updated_at DESC").page(page).per(40)
+    #self.find(:all, :includes => [:images]).order("movies.approved DESC, movies.updated_at DESC").page(page).per(40)
+    self.scoped.includes(:images).order("movies.approved DESC, movies.updated_at DESC").page(page).per(40)
   end
 
   def self.find_all_approved_includes(page)

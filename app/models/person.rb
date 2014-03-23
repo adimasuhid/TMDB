@@ -39,7 +39,8 @@ class Person < ActiveRecord::Base
 
   def self.find_all_and_include(page)
     # self.find(:all, :includes => [:alternative_names, :casts, :crews, :images, :videos, :views, :follows, :person_social_apps, :tags])
-    self.find(:all, :includes => [:images]).page(page).per(40)
+    #self.find(:all, :includes => [:images]).page(page).per(40)
+    self.scoped.includes(:images).page(page).per(40)
   end
 
   def self.find_all_approved_includes(page)

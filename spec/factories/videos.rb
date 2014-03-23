@@ -2,7 +2,7 @@
 
 FactoryGirl.define do
   factory :video do
-    link "MyString"
+    link "http://foo.com"
     videable_id 1
     videable_type "MyString"
     video_type "MyString"
@@ -19,5 +19,6 @@ FactoryGirl.define do
     temp_user_id "MyString"
     thumbnail2 "MyString"
     thumbnail3 "MyString"
+    priority "9.99"
   end
 end
