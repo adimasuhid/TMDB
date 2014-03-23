@@ -61,11 +61,13 @@ describe Movie do
     end
 
     it "returns a collection" do
-      #expect(Movie.find_all_includes).to be_an_instance_of Array
-      pending #because of erroneous method
+      expect(Movie.find_all_includes(1)).to be_an_instance_of ActiveRecord::Relation
     end
 
-    it "returns all movies"
+    it "returns all movies" do
+      expect(Movie.find_all_includes(1)).to include approved_movie
+      expect(Movie.find_all_includes(1)).to include movie
+    end
   end
 
   describe ".find_all_approved_includes" do
