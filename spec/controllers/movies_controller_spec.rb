@@ -36,6 +36,8 @@ describe MoviesController do
       before :each do
         movie.approved = true
         movie.save
+        movie.original_id = movie.id
+        movie.save
       end
 
       it "assigns @movies" do
