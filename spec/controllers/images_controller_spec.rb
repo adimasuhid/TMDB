@@ -63,4 +63,26 @@ describe ImagesController do
       end
     end
   end
+
+  describe "#get_keywords" do
+    context "with media keywords" do
+      before :each do
+        @media_keyword = FactoryGirl.create :media_keyword
+      end
+
+      it "calls find_all_by_id for keyword" do
+        controller.instance_variable_set(:@media_keywords, [@media_keyword])
+        controller.get_keywords
+        expect(controller.instance_variable_get(:@keywords)).to eq Keyword.scoped
+      end
+    end
+
+    context "without media keywords" do
+      it "assigns @keywords" do
+        controller.get_keywords
+        expect(controller.instance_variable_get(:@keywords)).to eq []
+      end
+    end
+
+  end
 end
