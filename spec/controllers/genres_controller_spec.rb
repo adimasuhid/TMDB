@@ -1,9 +1,5 @@
 require 'spec_helper'
 
-class CacheMock
-
-end
-
 describe GenresController do
   let!(:genre) { build :genre }
 
