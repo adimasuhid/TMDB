@@ -7,19 +7,20 @@ end
 describe Api::V1::BaseController do
 
   let!(:cache) { CacheMock.new }
+  let!(:user) { build :user }
 
   describe "filters" do
     describe "#fix_temp_user_id" do
       context "temp_user_id is undefined" do
         it "sets temp user id to empty string" do
-          controller.stub!(:params).and_return({ temp_user_id: "undefined" })
+          controller.stub(:params).and_return({ temp_user_id: "undefined" })
           expect(controller.fix_temp_user_id).to eq("")
         end
       end
 
       context "temp user id is not undefined" do
         it "doesn't change" do
-          controller.stub!(:params).and_return({ temp_user_id: nil })
+          controller.stub(:params).and_return({ temp_user_id: nil })
           expect(controller.fix_temp_user_id).to be_nil
         end
       end
@@ -29,7 +30,7 @@ describe Api::V1::BaseController do
       context "action is update, create, destroy, mark, import_all" do
         it "flushes cache" do
           actions = ["update", "create", "destroy", "mark", "import_all"]
-          controller.stub!(:params).and_return({ action: actions.sample })
+          controller.stub(:params).and_return({ action: actions.sample })
 
           controller.instance_variable_set(:@cache, cache)
 
@@ -40,15 +41,42 @@ describe Api::V1::BaseController do
 
       context "action is not update, create, destroy, mark, import_all" do
         it "returns nil" do
-          controller.stub!(:params).and_return({ action: "test" })
+          controller.stub(:params).and_return({ action: "test" })
 
           expect(controller.clear_cache).to be_nil
         end
       end
     end
 
-    describe "#set_pending"
-    describe "#current_api_user"
+    describe "#set_pending" do
+      pending #TODO: Make tests
+    end
+
+    describe "#current_api_user" do
+      context "doorkeeper_token has value" do
+        before :each do
+          Owner = Struct.new(:resource_owner_id)
+          user.save
+          user.reload
+
+          @owner = Owner.new
+          @owner.resource_owner_id = user.id
+        end
+
+        it "assigns @current_api_user" do
+          controller.stub(:doorkeeper_token).and_return(@owner)
+          expect(controller.current_api_user).to eq(user)
+        end
+      end
+
+      context "doorkeeper_token has no value" do
+        it "calls current user" do
+          controller.stub(:doorkeeper_token).and_return(false)
+          expect(controller).to receive(:current_user)
+          controller.current_api_user
+        end
+      end
+    end
   end
 
   describe "private methods" do
