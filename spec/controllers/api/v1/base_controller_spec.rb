@@ -80,7 +80,27 @@ describe Api::V1::BaseController do
   end
 
   describe "private methods" do
-    describe "#is_pendable"
+    describe "#is_pendable" do
+      context "@controller is within available actions" do
+        it "returns true" do
+          actions = ["alternative_names", "casts", "crews", "person_social_apps", "tags",
+          "images", "videos", "alternative_titles", "casts", "crews", "movie_genres",
+          "movie_keywords", "movie_languages", "movie_metadatas", "movies", "people",
+          "production_companies", "releases", "revenue_countries"]
+
+          controller.instance_variable_set(:@controller, actions.sample)
+          expect(controller.send(:is_pendable)).to be_true
+        end
+      end
+
+      context "@controller is outside available actions" do
+        it "returns false" do
+          controller.instance_variable_set(:@controller, "test")
+          expect(controller.send(:is_pendable)).to be_false
+        end
+      end
+    end
+
     describe "#pending_exist"
     describe "#add_new_pending_item"
     describe "#set_controller_name"
