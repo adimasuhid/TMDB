@@ -1,7 +1,9 @@
 require 'spec_helper'
 
 class CacheMock
+  def classify
 
+  end
 end
 
 describe Api::V1::BaseController do
@@ -49,7 +51,7 @@ describe Api::V1::BaseController do
     end
 
     describe "#set_pending" do
-      pending #TODO: Make tests
+      pending("TODO: Create Tests after Small Tests")
     end
 
     describe "#current_api_user" do
@@ -101,7 +103,29 @@ describe Api::V1::BaseController do
       end
     end
 
-    describe "#pending_exist"
+    describe "#pending_exist" do
+      before :each do
+        controller.instance_variable_set(:@controller, CacheMock.new)
+        controller.stub(:current_api_user).and_return(User.new)
+        @sample = PendingItem.new
+      end
+
+      context "pending items exist" do
+        it "returns true" do
+          PendingItem.stub(:where).and_return([1,2,3])
+          expect(controller.send(:pending_exist, @sample, 2, @sample)).to be_true
+        end
+      end
+
+      context "pending items don't exist" do
+        it "returns false" do
+          PendingItem.stub(:where).and_return([])
+          expect(controller.send(:pending_exist, @sample, 2, @sample)).to be_false
+        end
+      end
+
+    end
+
     describe "#add_new_pending_item"
     describe "#set_controller_name"
     describe "#set_params_user_id"
