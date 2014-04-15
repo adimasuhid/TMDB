@@ -160,7 +160,22 @@ describe Api::V1::BaseController do
 
     end
 
-    describe "#set_controller_name"
+    describe "#set_controller_name" do
+      context "controller is approvals" do
+        it "sets @attributes_names to empty array" do
+          controller.stub(:params).and_return({ controller: "approvals" })
+          expect(controller.send(:set_controller_name)).to be_empty
+        end
+      end
+
+      context "controller isnt approvals" do
+        it "sets @attributes names to be not empty" do
+          controller.stub(:params).and_return({ controller: "User" })
+          expect(controller.send(:set_controller_name)).to_not be_empty
+        end
+      end
+    end
+
     describe "#set_params_user_id"
     describe "#set_approved_false"
     describe "#check_if_destroy"
