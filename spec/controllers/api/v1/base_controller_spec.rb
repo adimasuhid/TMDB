@@ -105,7 +105,7 @@ describe Api::V1::BaseController do
 
     describe "#pending_exist" do
       before :each do
-        controller.instance_variable_set(:@controller, CacheMock.new)
+        controller.instance_variable_set(:@controller, cache)
         controller.stub(:current_api_user).and_return(User.new)
         @sample = PendingItem.new
       end
@@ -126,7 +126,40 @@ describe Api::V1::BaseController do
 
     end
 
-    describe "#add_new_pending_item"
+    describe "#add_new_pending_item" do
+      before :each do
+        controller.stub(:params).and_return({ test: { temp_user_id: 10 } })
+        controller.instance_variable_set(:@controller, cache)
+
+      end
+      it "returns a pending item" do
+        expect(controller.send(:add_new_pending_item, :test, ListItem.new)).to be_an_instance_of PendingItem
+      end
+
+      it "pending item approvable_id is not nil" do
+        list_item = ListItem.create
+
+        expect(controller.send(:add_new_pending_item, :test, list_item).approvable_id).to_not be_nil
+      end
+
+      context "with a current api user" do
+        it "returns pending item with user_id" do
+          user.save
+          user.reload
+
+          controller.stub(:current_api_user).and_return(user)
+          expect(controller.send(:add_new_pending_item, :test, ListItem.new).user_id).to_not be_nil
+        end
+      end
+
+      context "without a current api user" do
+        it "returns pending item with a temp_user_id" do
+          expect(controller.send(:add_new_pending_item, :test, ListItem.new).temp_user_id).to_not be_nil
+        end
+      end
+
+    end
+
     describe "#set_controller_name"
     describe "#set_params_user_id"
     describe "#set_approved_false"
