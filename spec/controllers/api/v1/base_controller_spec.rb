@@ -4,6 +4,10 @@ class CacheMock
   def classify
 
   end
+
+  def user_type
+    "admin"
+  end
 end
 
 describe Api::V1::BaseController do
@@ -220,10 +224,47 @@ describe Api::V1::BaseController do
           expect(controller.send(:set_params_user_id)).to be_nil
         end
       end
-
-
     end
-    describe "#set_approved_false"
+
+    describe "#set_approved_false" do
+      context "action is create" do
+        context "attribute names has approved" do
+          context "with current api user as admin" do
+            it "returns false" do
+              controller.stub(:params).and_return({ action: "update", "test" => { approved: nil }})
+              controller.instance_variable_set(:@attribute_names, ["approved"])
+              controller.stub(:current_api_user).and_return(cache)
+              expect(controller.send(:set_approved_false)).to be_false
+            end
+          end
+
+          context "with current api user as not admin" do
+            it "returns false" do
+              controller.stub(:params).and_return({ action: "update", "test" => { approved: nil }})
+              controller.instance_variable_set(:@attribute_names, ["approved"])
+              controller.stub(:current_api_user).and_return(false)
+              expect(controller.send(:set_approved_false)).to be_false
+            end
+          end
+        end
+
+        context "attribute names has no approved" do
+          it "returns nil" do
+            controller.stub(:params).and_return({ action: "update" })
+            controller.instance_variable_set(:@attribute_names, ["test"])
+            expect(controller.send(:set_approved_false)).to be_nil
+          end
+        end
+      end
+
+      context "action is not create" do
+        it "returns nil" do
+          controller.stub(:params).and_return({ action: "update" })
+          expect(controller.send(:set_approved_false)).to be_nil
+        end
+      end
+    end
+
     describe "#check_if_destroy"
     describe "#check_if_update"
     describe "#validate_action"
