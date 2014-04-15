@@ -176,7 +176,53 @@ describe Api::V1::BaseController do
       end
     end
 
-    describe "#set_params_user_id"
+    describe "#set_params_user_id" do
+      context "action is create or update" do
+        before :each do
+          controller.instance_variable_set(:@controller, "test")
+          controller.instance_variable_set(:@attribute_names, ["temp_user_id", "user_id"])
+        end
+
+        context "temp user id is present" do
+          it "returns temp user id" do
+            controller.stub(:params).and_return({ action: "create", temp_user_id: 1, "test" => { user_id: nil } })
+            controller.send(:set_params_user_id)
+            expect(controller.params["test"][:temp_user_id]).to eq(1)
+          end
+        end
+
+        context "current api user and attribute_names has user id" do
+          it "returns current api user id" do
+            user.save
+            user.reload
+
+            controller.stub(:params).and_return({ action: "create", temp_user_id: 1, "test" => { user_id: nil } })
+            controller.stub(:current_api_user).and_return(user)
+            controller.send(:set_params_user_id)
+            expect(controller.params["test"][:user_id]).to eq(user.id)
+          end
+        end
+
+        context "no current api user and no temp user id and no params" do
+          it "returns error" do
+            controller.stub(:params).and_return({ action: "create", temp_user_id: nil, "test" => { user_id: nil } })
+            controller.stub(:current_api_user).and_return(nil)
+            expect{
+              controller.send(:set_params_user_id)
+            }.to raise_error
+          end
+        end
+      end
+
+      context "action is not create or update" do
+        it "returns nil" do
+          controller.stub(:params).and_return({ action: "test" })
+          expect(controller.send(:set_params_user_id)).to be_nil
+        end
+      end
+
+
+    end
     describe "#set_approved_false"
     describe "#check_if_destroy"
     describe "#check_if_update"
