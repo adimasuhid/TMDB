@@ -39,3 +39,4 @@ __Routes__
 Procfile.dev
 .DS_Store
 .rspec
+coverage
