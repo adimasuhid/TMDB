@@ -265,8 +265,49 @@ describe Api::V1::BaseController do
       end
     end
 
-    describe "#check_if_destroy"
-    describe "#check_if_update"
+    describe "#check_if_destroy" do
+      context "action is destroy for controllers list_items, videos, images, lists, follows" do
+        it "calls validate action" do
+          controller_names = ["list_items", "videos", "images","lists", "follows"]
+          controller.stub(:params).and_return({ action: "destroy" })
+          controller.instance_variable_set(:@controller, controller_names.sample)
+
+          expect(controller).to receive :validate_action
+          controller.send(:check_if_destroy)
+        end
+      end
+
+      context "action is not destroy" do
+        it "returns nil" do
+          controller.stub(:params).and_return({ action: "update" })
+
+          expect(controller.send(:check_if_destroy)).to be_nil
+        end
+      end
+    end
+
+    describe "#check_if_update" do
+      context "action is update for controllers list_items, videos, images, lists, follows" do
+        it "calls validate action" do
+          controller_names = ["list_items", "videos", "images","lists", "follows"]
+          controller.stub(:params).and_return({ action: "update" })
+          controller.instance_variable_set(:@controller, controller_names.sample)
+
+          expect(controller).to receive :validate_action
+          controller.send(:check_if_update)
+        end
+      end
+
+      context "action is not update" do
+        it "returns nil" do
+          controller.stub(:params).and_return({ action: "update" })
+
+          expect(controller.send(:check_if_update)).to be_nil
+        end
+      end
+
+    end
+
     describe "#validate_action"
   end
 
