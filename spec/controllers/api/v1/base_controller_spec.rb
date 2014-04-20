@@ -14,6 +14,8 @@ describe Api::V1::BaseController do
 
   let!(:cache) { CacheMock.new }
   let!(:user) { build :user }
+  let!(:crew) { build :crew }
+  let!(:pending_item) { build :pending_item }
 
   describe "filters" do
     describe "#fix_temp_user_id" do
@@ -55,7 +57,255 @@ describe Api::V1::BaseController do
     end
 
     describe "#set_pending" do
-      pending("TODO: Create Tests after Small Tests")
+      context "action is create or update" do
+        before :each do
+          controller.stub(:params).and_return({ action: "update" })
+          controller.instance_variable_set(:@controller, "test")
+        end
+
+        context "is pendable" do
+          before :each do
+            user.save
+            controller.stub(:is_pendable).and_return(true)
+            controller.stub(:current_api_user).and_return(user.reload)
+          end
+
+          it "sets last item" do
+            expect_any_instance_of(String).to receive(:constantize).and_return(Movie)
+            controller.set_pending
+          end
+        end
+
+        context "controller has movie_id column" do
+          before :each do
+            user.save
+            crew.save
+            controller.instance_variable_set(:@controller, "crews")
+            controller.stub(:params).and_return({ action: "create", crew: { movie_id: 1} })
+            controller.stub(:current_api_user).and_return(user.reload)
+            controller.stub(:add_new_pending_item).and_return(pending_item)
+          end
+
+          context "pending exists" do
+            before :each do
+              controller.stub(:pending_exist).and_return(true)
+            end
+
+            it "returns nil" do
+              expect(controller.set_pending).to be_nil
+            end
+          end
+
+          context "pending does not exist" do
+            before :each do
+              controller.stub(:pending_exist).and_return(false)
+            end
+
+            it "pending is saved" do
+              expect(pending_item).to receive(:save).at_least :once
+              controller.set_pending
+            end
+          end
+        end
+
+        context "controller has person_id column" do
+          before :each do
+            user.save
+            crew.save
+            controller.instance_variable_set(:@controller, "crews")
+            controller.stub(:params).and_return({ action: "create", crew: { person_id: 1} })
+            controller.stub(:current_api_user).and_return(user.reload)
+            controller.stub(:add_new_pending_item).and_return(pending_item)
+          end
+
+          context "pending exists" do
+            before :each do
+              controller.stub(:pending_exist).and_return(true)
+            end
+
+            it "returns nil" do
+              expect(controller.set_pending).to be_nil
+            end
+          end
+
+          context "pending does not exist" do
+            before :each do
+              controller.stub(:pending_exist).and_return(false)
+            end
+
+            it "pending is saved" do
+              expect(pending_item).to receive(:save).at_least :once
+              controller.set_pending
+            end
+          end
+        end
+
+        context "controller is images and action is update" do
+          before :each do
+            user.save
+            controller.instance_variable_set(:@controller, "images")
+            controller.stub(:params).and_return({ action: "update", image: { imageable_id: 1, imageable_type: "test" } })
+            controller.stub(:current_api_user).and_return(user.reload)
+            controller.stub(:add_new_pending_item).and_return(pending_item)
+          end
+
+          context "pending exists" do
+            before :each do
+              controller.stub(:pending_exist).and_return(true)
+            end
+
+            it "returns nil" do
+              expect(controller.set_pending).to be_nil
+            end
+          end
+
+          context "pending does not exist" do
+            before :each do
+              controller.stub(:pending_exist).and_return(false)
+            end
+
+            it "pending is saved" do
+              expect(pending_item).to receive(:save).at_least :once
+              controller.set_pending
+            end
+          end
+        end
+
+        context "controller is videos" do
+          before :each do
+            user.save
+            controller.instance_variable_set(:@controller, "videos")
+            controller.stub(:params).and_return({ action: "update", video: { videable_id: 1, videable_type: "test" } })
+            controller.stub(:current_api_user).and_return(user.reload)
+            controller.stub(:add_new_pending_item).and_return(pending_item)
+          end
+
+          context "pending exists" do
+            before :each do
+              controller.stub(:pending_exist).and_return(true)
+            end
+
+            it "returns nil" do
+              expect(controller.set_pending).to be_nil
+            end
+          end
+
+          context "pending does not exist" do
+            before :each do
+              controller.stub(:pending_exist).and_return(false)
+            end
+
+            it "pending is saved" do
+              expect(pending_item).to receive(:save).at_least :once
+              controller.set_pending
+            end
+          end
+        end
+
+        context "controller is tags" do
+          before :each do
+            user.save
+            controller.instance_variable_set(:@controller, "tags")
+            controller.stub(:params).and_return({ action: "update", tag: { taggable_id: 1, taggable_type: "test" } })
+            controller.stub(:current_api_user).and_return(user.reload)
+            controller.stub(:add_new_pending_item).and_return(pending_item)
+          end
+
+          context "pending exists" do
+            before :each do
+              controller.stub(:pending_exist).and_return(true)
+            end
+
+            it "returns nil" do
+              expect(controller.set_pending).to be_nil
+            end
+          end
+
+          context "pending does not exist" do
+            before :each do
+              controller.stub(:pending_exist).and_return(false)
+            end
+
+            it "pending is saved" do
+              expect(pending_item).to receive(:save).at_least :once
+              controller.set_pending
+            end
+          end
+        end
+
+        context "controller is movies" do
+          before :each do
+            user.save
+            controller.instance_variable_set(:@controller, "movies")
+            controller.stub(:params).and_return({ action: "update"})
+            controller.stub(:current_api_user).and_return(user.reload)
+            controller.stub(:add_new_pending_item).and_return(pending_item)
+          end
+
+          context "pending exists" do
+            before :each do
+              controller.stub(:pending_exist).and_return(true)
+            end
+
+            it "returns nil" do
+              expect(controller.set_pending).to be_nil
+            end
+          end
+
+          context "pending does not exist" do
+            before :each do
+              controller.stub(:pending_exist).and_return(false)
+            end
+
+            it "pending is saved" do
+              expect(pending_item).to receive(:save).at_least :once
+              controller.set_pending
+            end
+          end
+        end
+
+        context "controller is people" do
+          before :each do
+            user.save
+            controller.instance_variable_set(:@controller, "people")
+            controller.stub(:params).and_return({ action: "update"})
+            controller.stub(:current_api_user).and_return(user.reload)
+            controller.stub(:add_new_pending_item).and_return(pending_item)
+          end
+
+          context "pending exists" do
+            before :each do
+              controller.stub(:pending_exist).and_return(true)
+            end
+
+            it "returns nil" do
+              expect(controller.set_pending).to be_nil
+            end
+          end
+
+          context "pending does not exist" do
+            before :each do
+              controller.stub(:pending_exist).and_return(false)
+            end
+
+            it "pending is saved" do
+              expect(pending_item).to receive(:save).at_least :once
+              controller.set_pending
+            end
+          end
+        end
+      end
+
+      context "action is not create or update" do
+        before :each do
+          controller.stub(:params).and_return({ action: "update" })
+          controller.instance_variable_set(:@controller, "test")
+        end
+
+        it "returns nil" do
+          expect(controller.set_pending).to be_nil
+        end
+      end
     end
 
     describe "#current_api_user" do
