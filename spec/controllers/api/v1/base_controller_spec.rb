@@ -308,7 +308,14 @@ describe Api::V1::BaseController do
 
     end
 
-    describe "#validate_action"
+    describe "#validate_action" do
+      context "current api user is not admin" do
+        it "calls redirect to root path" do
+          expect(controller).to receive :redirect_to
+          controller.send(:validate_action)
+        end
+      end
+    end
   end
 
 end
