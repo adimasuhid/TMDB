@@ -1,9 +1,5 @@
 require 'spec_helper'
 
-class CacheMock
-
-end
-
 describe Api::V1::CacheController do
   describe "#expire" do
     it "returns Cache item already deleted status" do
