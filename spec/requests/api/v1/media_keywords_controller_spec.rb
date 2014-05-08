@@ -47,4 +47,58 @@ describe Api::V1::MediaKeywordsController do
     end
 
   end
+
+  describe "#update" do
+    context "user is not admin/moderator" do
+      it "returns nil" do
+        put "/api/v1/media_keywords/#{media_keyword.id}", media_keyword: { temp_user_id: 2 }
+        expect(response.body).to eq " "
+      end
+    end
+
+    context "user is admin" do
+      before :each do
+        user.user_type = "admin"
+        user.save
+        allow_any_instance_of(Api::V1::MediaKeywordsController).to receive(:current_api_user).and_return(user)
+      end
+
+      context "no media keyword" do
+        it "returns error" do
+          put "/api/v1/media_keywords/#{media_keyword.id}", media_keyword: { temp_user_id: 2 }
+          expect(JSON.parse(response.body)).to eq({ "status" => "error" })
+        end
+      end
+
+      context "with media keyword" do
+        context "media keyword is updated" do
+          it "returns success" do
+            put "/api/v1/media_keywords/#{media_keyword.id}", media_keyword: {
+                temp_user_id: 2 ,
+                mediable_id: media_keyword.mediable_id,
+                mediable_type: media_keyword.mediable_type,
+                keyword_id: keyword.id,
+                approved: true
+            }
+            expect(JSON.parse(response.body)).to eq({ "status" => "success" })
+          end
+        end
+
+        context "media keyword is not updated" do
+          it "returns error" do
+            allow_any_instance_of(MediaKeyword).to receive(:save).and_return(false)
+            put "/api/v1/media_keywords/#{media_keyword.id}", media_keyword: {
+                temp_user_id: 2 ,
+                mediable_id: media_keyword.mediable_id,
+                mediable_type: media_keyword.mediable_type,
+                keyword_id: keyword.id,
+                approved: true
+            }
+            expect(JSON.parse(response.body)).to eq({ "status" => "error" })
+          end
+        end
+      end
+
+    end
+  end
 end
