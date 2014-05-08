@@ -21,4 +21,21 @@ describe Api::V1::TagsController do
       expect(assigns(:people)).to include person
     end
   end
+
+  describe "#show" do
+    it "assigns @tag" do
+      get "/api/v1/tags/#{tag.id}"
+      expect(assigns(:tag)).to eq tag
+    end
+
+    it "assigns @movies" do
+      get "/api/v1/tags/#{tag.id}"
+      expect(assigns(:movies)).to include movie
+    end
+
+    it "assigns @people" do
+      get "/api/v1/tags/#{tag.id}"
+      expect(assigns(:people)).to include person
+    end
+  end
 end
