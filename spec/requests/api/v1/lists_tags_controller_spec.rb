@@ -40,7 +40,7 @@ describe Api::V1::ListTagsController do
 
     context "erroneous destroy" do
       it "returns error" do
-        allow_any_instance_of(ListTag).to receive(:destroy_all).and_return(false)
+        allow_any_instance_of(ActiveRecord::Relation).to receive(:destroy_all).and_return(false)
 
         delete "/api/v1/list_tags/#{list_tag.id}", list_tag: {
           temp_user_id: 2,
@@ -51,7 +51,7 @@ describe Api::V1::ListTagsController do
           approved: true
         }
 
-        expect(JSON.parse(response.body)).to eq({ "status" => "success" })
+        expect(JSON.parse(response.body)).to eq({ "status" => "error" })
       end
     end
   end
