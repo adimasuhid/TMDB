@@ -53,12 +53,23 @@ describe Api::V1::ListTagsController do
             }
 
             expect(JSON.parse(response.body)).to eq({ "status" => "success" })
-
           end
         end
 
         context "list tag is not updated" do
-          it "returns error"
+          it "returns error" do
+            allow_any_instance_of(ListTag).to receive(:save).and_return(false)
+            put "/api/v1/list_tags/#{list_tag.id}", list_tag: {
+              temp_user_id: 2,
+              taggable_id: movie.id,
+              taggable_type: "movie",
+              listable_id: list_tag.listable_id,
+              listable_type: list_tag.listable_type,
+              approved: true
+            }
+
+            expect(JSON.parse(response.body)).to eq({ "status" => "error" })
+          end
         end
       end
 
