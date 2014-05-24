@@ -5,10 +5,6 @@ describe Api::V1::ListKeywordsController do
   let!(:list_keyword) { create :list_keyword, keyword_id: keyword.id }
   let!(:user) { create :user, user_type: "admin" }
 
-  describe "#index" do
-    pending "no template"
-  end
-
   describe "#create" do
     it "creates list keyword" do
       expect do
