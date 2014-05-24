@@ -5,10 +5,6 @@ describe Api::V1::MediaKeywordsController do
   let!(:user) { create :user }
   let!(:media_keyword) { create :media_keyword, keyword_id: keyword.id, user_id: user.id }
 
-  describe "#index" do
-    pending #no output, no template
-  end
-
   describe "#create" do
 
     it "returns success" do

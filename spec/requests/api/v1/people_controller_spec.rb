@@ -117,10 +117,6 @@ describe Api::V1::PeopleController do
     end
   end
 
-  describe "#create" do
-    pending "no template"
-  end
-
   describe "#search" do
     it "renders json" do
       get "/api/v1/people/search", { term: people.name }
