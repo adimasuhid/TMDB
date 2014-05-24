@@ -9,7 +9,6 @@ FactoryGirl.define do
     approved false
     locked []
     user_id 1
-    original_id 1
     popular "9.99"
     temp_user_id "MyString"
     meta_title "MyString"
